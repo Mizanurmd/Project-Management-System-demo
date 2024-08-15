@@ -12,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/projects")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class ProjectController {
     @Autowired
     private ProjectService proServ;
@@ -39,11 +40,12 @@ public class ProjectController {
      @PutMapping("/update/{id}")
      public ResponseEntity<Project>updateProject(@PathVariable("id")Long id, @RequestBody Project project){
         Project updateProject = proServ.updateProject(id,project);
-
+        System.out.println("Update Project=============="+ updateProject(id, project));
         return new ResponseEntity<>(updateProject, HttpStatus.OK);
      }
     @DeleteMapping("/{id}")
      public ResponseEntity<Void>deleteProject(@PathVariable("id")Long id){
+        System.out.println("==================="+ id);
          proServ.deleteProject(id);
          return ResponseEntity.noContent().build();
      }

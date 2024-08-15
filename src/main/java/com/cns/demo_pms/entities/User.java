@@ -58,7 +58,7 @@ public class User  implements UserDetails {
     @ToString.Exclude
     private List<Project> ownedProjects;
 
-    @ManyToMany(mappedBy = "members")
+    @ManyToMany(mappedBy = "members", cascade = CascadeType.ALL)
     @JsonIgnore
     @ToString.Exclude
     private List<Project> memberOfProjects;
