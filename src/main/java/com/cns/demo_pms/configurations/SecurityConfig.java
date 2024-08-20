@@ -29,8 +29,7 @@ public class SecurityConfig {
     private JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Autowired
-    private  CustomLogoutHandler  logoutHandler;
-
+    private CustomLogoutHandler logoutHandler;
 
 
     @Bean
@@ -39,10 +38,11 @@ public class SecurityConfig {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
-                        req->req.requestMatchers("/api/v1/login",
+                        req -> req.requestMatchers("/api/v1/login",
                                         "/api/v1/register",
                                         "/api/v1/refresh_token",
                                         "/api/v1/projects/**",
+                                        "/api/v1/reports/**",
                                         "/api/v1/users/**",
                                         "/swagger-ui/**",
                                         "/v3/api-docs/**")
@@ -52,15 +52,15 @@ public class SecurityConfig {
                                 .authenticated()
 
                 ).userDetailsService(userDetailsServiceImp)
-                .sessionManagement(session->session
+                .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore((Filter) jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(
-                        e->e.accessDeniedHandler(
-                                        (request, response, accessDeniedException)->response.setStatus(403)
+                        e -> e.accessDeniedHandler(
+                                        (request, response, accessDeniedException) -> response.setStatus(403)
                                 )
                                 .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
-                .logout(l->l
+                .logout(l -> l
                         .logoutUrl("/logout")
                         .addLogoutHandler(logoutHandler)
                         .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext()
@@ -78,8 +78,6 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
     }
-
-
 
 
 }
